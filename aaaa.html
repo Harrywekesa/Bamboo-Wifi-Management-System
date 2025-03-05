@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bamboo Tech</title>
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Body Styling */
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-color: #FFFFFF;
+            color: #333333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+        }
+
+        /* Container Styling */
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            background-color: #FFFFFF;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+        }
+
+        /* Header Styling */
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .header h1 {
+            font-size: 24px;
+            color: #3E844C;
+            margin-bottom: 5px;
+        }
+        .header p {
+            font-size: 14px;
+            color: #666666;
+        }
+
+        /* Package Section */
+        .package-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .package {
+            padding: 15px;
+            border: 1px solid #3E844C;
+            border-radius: 8px;
+            background-color: #F9F9F9;
+            text-align: center;
+            transition: transform 0.2s ease;
+        }
+        .package:hover {
+            transform: scale(1.05);
+        }
+        .package h3 {
+            font-size: 18px;
+            color: #3E844C;
+            margin-bottom: 5px;
+        }
+        .package p {
+            font-size: 14px;
+            color: #666666;
+        }
+        .package button {
+            display: block;
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #FFFFFF;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .package button.green {
+            background-color: #28A745;
+        }
+
+        /* Admin Login Modal */
+        .admin-login {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            z-index: 1000;
+        }
+        .admin-login.active {
+            display: block;
+        }
+        .admin-login input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #3E844C;
+            border-radius: 5px;
+        }
+        .admin-login button {
+            width: 100%;
+            padding: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            color: #FFFFFF;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+        .admin-login button.green {
+            background-color: #28A745;
+        }
+
+        /* Footer Section */
+        .footer {
+            text-align: center;
+            margin-top: 20px;
+            font-size: 12px;
+            color: #666666;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1>Bamboo Tech Hotspot</h1>
+            <p>Connect to the internet by purchasing a package below.</p>
+            <button class="green" onclick="showAdminLogin()">Admin</button>
+        </div>
+
+        <!-- Package Grid -->
+        <div id="package-grid" class="package-grid">
+            <div class="package">
+                <h3>TEST</h3>
+                <p>Kes. 2 valid for 3 minutes</p>
+                <button class="green" onclick="showPaymentModal('test', 2)">Buy Now</button>
+            </div>
+            <div class="package">
+                <h3>30 Minutes</h3>
+                <p>Kes. 7 valid for 30 minutes</p>
+                <button class="green" onclick="showPaymentModal('30min', 7)">Buy Now</button>
+            </div>
+            <div class="package">
+                <h3>1 Hour</h3>
+                <p>Kes. 9 valid for 1 hour</p>
+                <button class="green" onclick="showPaymentModal('1hr', 9)">Buy Now</button>
+            </div>
+            <div class="package">
+                <h3>3 Hours</h3>
+                <p>Kes. 12 valid for 3 hours</p>
+                <button class="green" onclick="showPaymentModal('3hr', 12)">Buy Now</button>
+            </div>
+            <!-- Add more packages here -->
+        </div>
+
+        <!-- Already Have a Package? -->
+        <div class="package">
+            <h3>Already Have an Active Package?</h3>
+            <p>Enter your account number to connect:</p>
+            <input type="text" id="accountNumber" placeholder="Account Number">
+            <button class="green" onclick="connectWithAccount()">Connect</button>
+        </div>
+
+        <!-- Footer -->
+        <div class="footer">
+            <p>For inquiries, contact us at <a href="tel:0715406550">0715406550</a>.</p>
+        </div>
+    </div>
+
+    <!-- Admin Login Modal -->
+    <div class="admin-login" id="adminLoginModal">
+        <h2>Admin Login</h2>
+        <input type="password" id="adminPassword" placeholder="Enter Password">
+        <button class="green" onclick="adminLogin()">Login</button>
+    </div>
+
+    <script>
+        // Show payment modal
+        function showPaymentModal(packageType, amount) {
+            alert(`You selected the ${packageType} package for Kes. ${amount}.`);
+            // Add logic for payment processing here
+        }
+
+        // Show admin login modal
+        function showAdminLogin() {
+            const adminLoginModal = document.getElementById('adminLoginModal');
+            adminLoginModal.classList.add('active');
+        }
+
+        // Handle admin login
+        function adminLogin() {
+            const enteredPassword = document.getElementById('adminPassword').value;
+            const correctPassword = 'admin123'; // Hardcoded admin password
+            if (enteredPassword === correctPassword) {
+                alert('Login successful!');
+                window.location.href = 'admin.html'; // Redirect to admin dashboard
+            } else {
+                alert('Incorrect password!');
+            }
+        }
+
+        // Connect with account number
+        function connectWithAccount() {
+            const accountNumber = document.getElementById('accountNumber').value;
+            if (accountNumber) {
+                alert(`Connecting with account number: ${accountNumber}`);
+                // Add logic to authenticate the user here
+            } else {
+                alert('Please enter your account number.');
+            }
+        }
+    </script>
+</body>
+</html>
