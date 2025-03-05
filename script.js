@@ -67,16 +67,29 @@ function processPayment() {
     closePaymentModal();
 }
 
-// Save transaction to file (placeholder logic)
+// Save transaction to file
 async function saveTransaction(transaction) {
     try {
-        const TRANSACTIONS_FILE = '/hotspot/transactions.json'; // Adjust path as needed
+        const TRANSACTIONS_FILE = 'transactions.json'; // Adjust path as needed
         let transactions = [];
 
         const response = await fetch(TRANSACTIONS_FILE);
         if (response.ok) {
             transactions = await response.json();
         }
+
+        // Prompt for M-Pesa Code and User Name
+        const mpesaCode = prompt('Enter the M-Pesa Code:');
+        const userName = prompt('Enter the User Name:');
+
+        if (!mpesaCode || !userName) {
+            alert('M-Pesa Code and User Name are required.');
+            return;
+        }
+
+        // Add M-Pesa Code and User Name to the transaction
+        transaction.mpesaCode = mpesaCode;
+        transaction.userName = userName;
 
         transactions.push(transaction);
 

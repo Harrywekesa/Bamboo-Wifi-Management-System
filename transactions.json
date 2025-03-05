@@ -3,24 +3,16 @@
         "date": "2024-03-05T12:30:00Z",
         "phoneNumber": "0712345678",
         "package": "30 MINUTES",
-        "amount": 7
+        "amount": 7,
+        "mpesaCode": "XYZ123456",
+        "userName": "John Doe"
     },
     {
         "date": "2024-03-05T14:45:00Z",
         "phoneNumber": "0723456789",
         "package": "1 Hour",
-        "amount": 9
-    },
-    {
-        "date": "2024-03-05T16:00:00Z",
-        "phoneNumber": "0734567890",
-        "package": "1 WEEK OFFER",
-        "amount": 190
-    },
-    {
-        "date": "2024-03-05T18:15:00Z",
-        "phoneNumber": "0745678901",
-        "package": "1 MONTH SPECIAL",
-        "amount": 700
+        "amount": 9,
+        "mpesaCode": "ABC987654",
+        "userName": "Jane Smith"
     }
 ]

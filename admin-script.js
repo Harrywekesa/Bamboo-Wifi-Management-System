@@ -45,29 +45,85 @@ document.getElementById('addPackageForm').addEventListener('submit', async (e) =
         return;
     }
 
-    const newPackage = { name, price, duration };
-
     try {
-        let packages = [];
-        const response = await fetch(PACKAGES_FILE);
-        if (response.ok) {
-            packages = await response.json();
-        }
-        packages.push(newPackage);
-
-        await fetch(PACKAGES_FILE, {
+        const response = await fetch('process.php', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(packages),
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: `action=add_package&name=${encodeURIComponent(name)}&price=${price}&duration=${encodeURIComponent(duration)}`
         });
 
-        alert('Package added successfully!');
-        location.reload(); // Reload the page to reflect changes
+        const result = await response.json();
+        if (result.success) {
+            alert('Package added successfully!');
+            location.reload(); // Reload the page to reflect changes
+        } else {
+            alert('Failed to add package.');
+        }
     } catch (error) {
         console.error('Error adding package:', error);
-        alert('Failed to add package. Check console for details.');
+        alert('An error occurred. Please try again.');
     }
 });
+
+// Delete package
+async function deletePackage(name) {
+    if (!confirm(`Are you sure you want to delete "${name}"?`)) return;
+
+    try {
+        const response = await fetch('process.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: `action=delete_package&name=${encodeURIComponent(name)}`
+        });
+
+        const result = await response.json();
+        if (result.success) {
+            alert('Package deleted successfully!');
+            location.reload(); // Reload the page to reflect changes
+        } else {
+            alert('Failed to delete package.');
+        }
+    } catch (error) {
+        console.error('Error deleting package:', error);
+        alert('An error occurred. Please try again.');
+    }
+}
+// Save transaction to file
+async function saveTransaction(transaction) {
+    try {
+        const TRANSACTIONS_FILE = 'transactions.json'; // Adjust path as needed
+        let transactions = [];
+
+        const response = await fetch(TRANSACTIONS_FILE);
+        if (response.ok) {
+            transactions = await response.json();
+        }
+
+        // Prompt for M-Pesa Code and User Name
+        const mpesaCode = prompt('Enter the M-Pesa Code:');
+        const userName = prompt('Enter the User Name:');
+
+        if (!mpesaCode || !userName) {
+            alert('M-Pesa Code and User Name are required.');
+            return;
+        }
+
+        // Add M-Pesa Code and User Name to the transaction
+        transaction.mpesaCode = mpesaCode;
+        transaction.userName = userName;
+
+        transactions.push(transaction);
+
+        await fetch(TRANSACTIONS_FILE, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(transactions),
+        });
+    } catch (error) {
+        console.error('Error saving transaction:', error);
+        alert('Failed to record transaction. Check console for details.');
+    }
+}
 
 // Delete package
 async function deletePackage(name) {
@@ -78,12 +134,16 @@ async function deletePackage(name) {
         const response = await fetch(PACKAGES_FILE);
         if (response.ok) {
             packages = await response.json();
+        } else {
+            console.error(`Failed to fetch packages: ${response.status} ${response.statusText}`);
+            alert('Failed to load packages. Please check the file path or server configuration.');
+            return;
         }
 
         const updatedPackages = packages.filter(pkg => pkg.name !== name);
 
         await fetch(PACKAGES_FILE, {
-            method: 'PUT',
+            method: 'POST', // Use POST instead of PUT
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(updatedPackages),
         });
@@ -121,12 +181,13 @@ function renderTransactions(transactions) {
                 <td>${transaction.phoneNumber}</td>
                 <td>${transaction.package}</td>
                 <td>Kes. ${transaction.amount}</td>
+                <td>${transaction.mpesaCode || 'N/A'}</td>
+                <td>${transaction.userName || 'N/A'}</td>
             </tr>
         `;
         transactionTableBody.insertAdjacentHTML('beforeend', row);
     });
 }
-
 // Load packages and transactions when the page loads
 window.onload = () => {
     loadPackages();

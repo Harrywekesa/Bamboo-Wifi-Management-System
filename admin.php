@@ -25,7 +25,16 @@
         <!-- Package List -->
         <h2>Current Packages</h2>
         <div id="packageList" class="package-grid">
-            <!-- Packages will be dynamically loaded here -->
+            <?php
+            require 'db.php';
+            $packages = get_packages($pdo);
+            foreach ($packages as $pkg): ?>
+                <div class="package">
+                    <h3><?= htmlspecialchars($pkg['name']) ?></h3>
+                    <p>Kes. <?= $pkg['price'] ?> valid for <?= htmlspecialchars($pkg['duration']) ?></p>
+                    <button class="red" onclick="deletePackage('<?= $pkg['name'] ?>')">Delete</button>
+                </div>
+            <?php endforeach; ?>
         </div>
 
         <!-- Transactions Table -->
@@ -37,10 +46,23 @@
                     <th>Phone Number</th>
                     <th>Package</th>
                     <th>Amount</th>
+                    <th>M-Pesa Code</th>
+                    <th>User Name</th>
                 </tr>
             </thead>
-            <tbody id="transactionTableBody">
-                <!-- Transactions will be dynamically loaded here -->
+            <tbody>
+                <?php
+                $transactions = get_transactions($pdo);
+                foreach ($transactions as $transaction): ?>
+                    <tr>
+                        <td><?= $transaction['date'] ?></td>
+                        <td><?= htmlspecialchars($transaction['phone_number']) ?></td>
+                        <td><?= htmlspecialchars($transaction['package_name']) ?></td>
+                        <td>Kes. <?= $transaction['amount'] ?></td>
+                        <td><?= htmlspecialchars($transaction['mpesa_code'] ?? 'N/A') ?></td>
+                        <td><?= htmlspecialchars($transaction['user_name'] ?? 'N/A') ?></td>
+                    </tr>
+                <?php endforeach; ?>
             </tbody>
         </table>
     </div>
