@@ -1,7 +1,8 @@
 // File paths
-const PACKAGES_FILE = 'packages.json'; // Use relative path for local testing
+const PACKAGES_FILE = 'packages.json'; // Adjust path as needed
+const TRANSACTIONS_FILE = 'transactions.json'; // Adjust path as needed
 
-// Load packages
+// Load packages from file
 async function loadPackages() {
     try {
         const response = await fetch(PACKAGES_FILE);
@@ -10,8 +11,10 @@ async function loadPackages() {
         renderPackages(packages);
     } catch (error) {
         console.error('Error loading packages:', error);
+        alert('Failed to load packages. Check console for details.');
     }
 }
+
 
 // Render packages dynamically
 function renderPackages(packages) {
@@ -53,15 +56,16 @@ document.getElementById('addPackageForm').addEventListener('submit', async (e) =
         packages.push(newPackage);
 
         await fetch(PACKAGES_FILE, {
-            method: 'PUT',
+            method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(packages),
         });
 
         alert('Package added successfully!');
-        location.reload();
+        location.reload(); // Reload the page to reflect changes
     } catch (error) {
         console.error('Error adding package:', error);
+        alert('Failed to add package. Check console for details.');
     }
 });
 
@@ -85,11 +89,46 @@ async function deletePackage(name) {
         });
 
         alert('Package deleted successfully!');
-        location.reload();
+        location.reload(); // Reload the page to reflect changes
     } catch (error) {
         console.error('Error deleting package:', error);
+        alert('Failed to delete package. Check console for details.');
     }
 }
 
-// Load packages when the page loads
-window.onload = loadPackages;
+// Load transactions
+async function loadTransactions() {
+    try {
+        const response = await fetch(TRANSACTIONS_FILE);
+        if (!response.ok) throw new Error('Failed to load transactions');
+        const transactions = await response.json();
+        renderTransactions(transactions);
+    } catch (error) {
+        console.error('Error loading transactions:', error);
+        alert('Failed to load transactions. Check console for details.');
+    }
+}
+
+// Render transactions dynamically
+function renderTransactions(transactions) {
+    const transactionTableBody = document.getElementById('transactionTableBody');
+    transactionTableBody.innerHTML = ''; // Clear existing rows
+
+    transactions.forEach(transaction => {
+        const row = `
+            <tr>
+                <td>${new Date(transaction.date).toLocaleString()}</td>
+                <td>${transaction.phoneNumber}</td>
+                <td>${transaction.package}</td>
+                <td>Kes. ${transaction.amount}</td>
+            </tr>
+        `;
+        transactionTableBody.insertAdjacentHTML('beforeend', row);
+    });
+}
+
+// Load packages and transactions when the page loads
+window.onload = () => {
+    loadPackages();
+    loadTransactions();
+};

@@ -1,5 +1,5 @@
 // File paths
-const PACKAGES_FILE = 'packages.json';
+const PACKAGES_FILE = 'packages.json'; // Adjust path as needed
 
 // Load packages from file
 async function loadPackages() {
@@ -10,6 +10,7 @@ async function loadPackages() {
         renderPackages(packages);
     } catch (error) {
         console.error('Error loading packages:', error);
+        alert('Failed to load packages. Check console for details.');
     }
 }
 
@@ -44,6 +45,72 @@ function showPaymentModal(packageType, amount) {
     modalOverlay.classList.add('active');
 }
 
+// Process the payment (placeholder logic)
+function processPayment() {
+    const mpesaNumber = document.getElementById('mpesaNumber').value.trim();
+    const modalTitle = document.getElementById('modalTitle').textContent;
+
+    if (!mpesaNumber || isNaN(parseFloat(mpesaNumber)) || mpesaNumber.length !== 12) {
+        alert('Please enter a valid 12-digit M-Pesa phone number.');
+        return;
+    }
+
+    // Simulate payment processing
+    alert(`Payment request sent to ${mpesaNumber}. Please wait while we process your payment.`);
+    saveTransaction({
+        date: new Date().toISOString(),
+        phoneNumber: mpesaNumber,
+        package: modalTitle.split(' ')[1], // Extract package name from title
+        amount: parseFloat(document.getElementById('amountDisplay').textContent.replace('Amount: Kes. ', '')),
+    });
+
+    closePaymentModal();
+}
+
+// Save transaction to file (placeholder logic)
+async function saveTransaction(transaction) {
+    try {
+        const TRANSACTIONS_FILE = '/hotspot/transactions.json'; // Adjust path as needed
+        let transactions = [];
+
+        const response = await fetch(TRANSACTIONS_FILE);
+        if (response.ok) {
+            transactions = await response.json();
+        }
+
+        transactions.push(transaction);
+
+        await fetch(TRANSACTIONS_FILE, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(transactions),
+        });
+    } catch (error) {
+        console.error('Error saving transaction:', error);
+        alert('Failed to record transaction. Check console for details.');
+    }
+}
+
+// Close the payment modal
+function closePaymentModal() {
+    const modalOverlay = document.getElementById('paymentModalOverlay');
+    modalOverlay.classList.remove('active');
+    document.getElementById('mpesaNumber').value = ''; // Clear input field
+}
+
+// Connect with account number
+function connectWithAccount() {
+    const accountNumber = document.getElementById('accountNumber').value.trim();
+    if (!accountNumber) {
+        alert('Please enter your account number.');
+        return;
+    }
+
+    // Simulate connection logic
+    alert(`Connecting with account number: ${accountNumber}`);
+    // Add logic to authenticate the user here
+}
+
 // Show admin login modal
 function showAdminLogin() {
     const adminLoginModal = document.getElementById('adminLoginModal');
@@ -52,43 +119,14 @@ function showAdminLogin() {
 
 // Handle admin login
 function adminLogin() {
-    const enteredPassword = document.getElementById('adminPassword').value;
+    const enteredPassword = document.getElementById('adminPassword').value.trim();
     const correctPassword = 'admin123'; // Hardcoded admin password
+
     if (enteredPassword === correctPassword) {
         alert('Login successful!');
         window.location.href = 'admin.html'; // Redirect to admin dashboard
     } else {
         alert('Incorrect password!');
-    }
-}
-
-// Process the payment (placeholder logic)
-function processPayment() {
-    const mpesaNumber = document.getElementById('mpesaNumber').value;
-    if (mpesaNumber.trim() === '') {
-        alert('Please enter a valid M-Pesa phone number.');
-        return;
-    }
-
-    // Simulate payment processing
-    alert(`Payment request sent to ${mpesaNumber}. Please wait while we process your payment.`);
-    closePaymentModal();
-}
-
-// Close the payment modal
-function closePaymentModal() {
-    const modalOverlay = document.getElementById('paymentModalOverlay');
-    modalOverlay.classList.remove('active');
-}
-
-// Connect with account number
-function connectWithAccount() {
-    const accountNumber = document.getElementById('accountNumber').value;
-    if (accountNumber) {
-        alert(`Connecting with account number: ${accountNumber}`);
-        // Add logic to authenticate the user here
-    } else {
-        alert('Please enter your account number.');
     }
 }
 
