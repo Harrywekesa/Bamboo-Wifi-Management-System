@@ -1,3 +1,15 @@
+<?php
+session_start(); // Start the session at the top
+
+// Check if the admin is logged in
+if (!isset($_SESSION['admin_logged_in']) || $_SESSION['admin_logged_in'] !== true) {
+    header("Location: index.php?error=Unauthorized"); // Redirect to the main page
+    exit;
+}
+
+require 'db.php';
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,6 +23,7 @@
     <div class="container">
         <div class="header">
             <h1>Bamboo Tech Admin Dashboard</h1>
+            <a href="index.php" class="green">Logout</a>
         </div>
 
         <!-- Add Package Form -->
@@ -26,7 +39,6 @@
         <h2>Current Packages</h2>
         <div id="packageList" class="package-grid">
             <?php
-            require 'db.php';
             $packages = get_packages($pdo);
             foreach ($packages as $pkg): ?>
                 <div class="package">

@@ -2,8 +2,8 @@
 // Database configuration
 $host = 'localhost';
 $dbname = 'bwms'; // Replace with your database name
-$username = 'root';     // Replace with your MySQL username
-$password = '';         // Replace with your MySQL password
+$username = 'root'; // Replace with your MySQL username
+$password = '';     // Replace with your MySQL password
 
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);

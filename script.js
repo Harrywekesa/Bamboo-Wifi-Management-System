@@ -1,10 +1,12 @@
-// File paths
-const PACKAGES_FILE = 'packages.json'; // Adjust path as needed
-
-// Load packages from file
+// Load packages from PHP (via process.php)
 async function loadPackages() {
     try {
-        const response = await fetch(PACKAGES_FILE);
+        const response = await fetch('process.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: 'action=get_packages'
+        });
+
         if (!response.ok) throw new Error('Failed to load packages');
         const packages = await response.json();
         renderPackages(packages);
@@ -45,7 +47,7 @@ function showPaymentModal(packageType, amount) {
     modalOverlay.classList.add('active');
 }
 
-// Process the payment (placeholder logic)
+// Process the payment
 function processPayment() {
     const mpesaNumber = document.getElementById('mpesaNumber').value.trim();
     const modalTitle = document.getElementById('modalTitle').textContent;
@@ -55,53 +57,30 @@ function processPayment() {
         return;
     }
 
+    const packageType = modalTitle.split(' ')[1];
+    const amount = parseFloat(document.getElementById('amountDisplay').textContent.replace('Amount: Kes. ', ''));
+
     // Simulate payment processing
     alert(`Payment request sent to ${mpesaNumber}. Please wait while we process your payment.`);
-    saveTransaction({
-        date: new Date().toISOString(),
-        phoneNumber: mpesaNumber,
-        package: modalTitle.split(' ')[1], // Extract package name from title
-        amount: parseFloat(document.getElementById('amountDisplay').textContent.replace('Amount: Kes. ', '')),
-    });
+
+    // Log transaction via AJAX
+    fetch('process.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: `action=log_transaction&phone_number=${mpesaNumber}&package_name=${encodeURIComponent(packageType)}&amount=${amount}`
+    }).then(response => response.json())
+      .then(data => {
+          if (data.success) {
+              alert('Transaction recorded successfully!');
+          } else {
+              alert('Failed to record transaction.');
+          }
+      }).catch(error => {
+          console.error('Error recording transaction:', error);
+          alert('An error occurred. Please try again.');
+      });
 
     closePaymentModal();
-}
-
-// Save transaction to file
-async function saveTransaction(transaction) {
-    try {
-        const TRANSACTIONS_FILE = 'transactions.json'; // Adjust path as needed
-        let transactions = [];
-
-        const response = await fetch(TRANSACTIONS_FILE);
-        if (response.ok) {
-            transactions = await response.json();
-        }
-
-        // Prompt for M-Pesa Code and User Name
-        const mpesaCode = prompt('Enter the M-Pesa Code:');
-        const userName = prompt('Enter the User Name:');
-
-        if (!mpesaCode || !userName) {
-            alert('M-Pesa Code and User Name are required.');
-            return;
-        }
-
-        // Add M-Pesa Code and User Name to the transaction
-        transaction.mpesaCode = mpesaCode;
-        transaction.userName = userName;
-
-        transactions.push(transaction);
-
-        await fetch(TRANSACTIONS_FILE, {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify(transactions),
-        });
-    } catch (error) {
-        console.error('Error saving transaction:', error);
-        alert('Failed to record transaction. Check console for details.');
-    }
 }
 
 // Close the payment modal
@@ -119,7 +98,6 @@ function connectWithAccount() {
         return;
     }
 
-    // Simulate connection logic
     alert(`Connecting with account number: ${accountNumber}`);
     // Add logic to authenticate the user here
 }
@@ -131,15 +109,33 @@ function showAdminLogin() {
 }
 
 // Handle admin login
-function adminLogin() {
-    const enteredPassword = document.getElementById('adminPassword').value.trim();
-    const correctPassword = 'admin123'; // Hardcoded admin password
+async function adminLogin(event) {
+    event.preventDefault();
+    const username = document.getElementById('adminUsername').value.trim();
+    const password = document.getElementById('adminPassword').value.trim();
 
-    if (enteredPassword === correctPassword) {
-        alert('Login successful!');
-        window.location.href = 'admin.html'; // Redirect to admin dashboard
-    } else {
-        alert('Incorrect password!');
+    if (!username || !password) {
+        alert('Please enter both username and password.');
+        return;
+    }
+
+    try {
+        const response = await fetch('process.php', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: `action=login_admin&username=${username}&password=${password}`
+        });
+
+        const result = await response.json();
+        if (result.success) {
+            alert('Login successful!');
+            window.location.href = 'admin.php'; // Redirect to admin dashboard
+        } else {
+            alert(result.message || 'Incorrect username or password.');
+        }
+    } catch (error) {
+        console.error('Error during login:', error);
+        alert('An error occurred. Please try again.');
     }
 }
 
