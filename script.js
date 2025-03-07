@@ -48,39 +48,61 @@ function showPaymentModal(packageType, amount) {
 }
 
 // Process the payment
-function processPayment() {
+async function processPayment() {
     const mpesaNumber = document.getElementById('mpesaNumber').value.trim();
     const modalTitle = document.getElementById('modalTitle').textContent;
 
-    if (!mpesaNumber || isNaN(parseFloat(mpesaNumber)) || mpesaNumber.length !== 12) {
-        alert('Please enter a valid 12-digit M-Pesa phone number.');
+    if (!mpesaNumber || isNaN(parseFloat(mpesaNumber)) || mpesaNumber.length !== 10) {
+        //alert('Please enter a valid 10-digit M-Pesa phone number.');
         return;
     }
 
     const packageType = modalTitle.split(' ')[1];
     const amount = parseFloat(document.getElementById('amountDisplay').textContent.replace('Amount: Kes. ', ''));
 
-    // Simulate payment processing
-    alert(`Payment request sent to ${mpesaNumber}. Please wait while we process your payment.`);
-
-    // Log transaction via AJAX
-    fetch('process.php', {
+    // Initiate STK Push
+    fetch('process_payment.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: `action=log_transaction&phone_number=${mpesaNumber}&package_name=${encodeURIComponent(packageType)}&amount=${amount}`
+        body: `phone_number=${mpesaNumber}&package_name=${encodeURIComponent(packageType)}&amount=${amount}`
     }).then(response => response.json())
       .then(data => {
           if (data.success) {
-              alert('Transaction recorded successfully!');
+              alert('Payment request sent successfully! Please confirm on your phone.');
+              checkTransactionStatus(data.checkout_request_id); // Poll for transaction status
           } else {
-              alert('Failed to record transaction.');
+              alert('Failed to send payment request.');
           }
       }).catch(error => {
-          console.error('Error recording transaction:', error);
+          console.error('Error during payment:', error);
           alert('An error occurred. Please try again.');
       });
 
     closePaymentModal();
+}
+
+// Check transaction status periodically
+function checkTransactionStatus(checkoutRequestId) {
+    const intervalId = setInterval(async () => {
+        try {
+            const response = await fetch('verify_transaction.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: `checkout_request_id=${checkoutRequestId}`
+            });
+
+            const result = await response.json();
+            if (result.success) {
+                clearInterval(intervalId);
+                alert('Transaction verified successfully!');
+            } else if (result.message.includes('Failed')) {
+                clearInterval(intervalId);
+                alert('Transaction failed. Please try again.');
+            }
+        } catch (error) {
+            console.error('Error verifying transaction:', error);
+        }
+    }, 5000); // Poll every 5 seconds
 }
 
 // Close the payment modal
