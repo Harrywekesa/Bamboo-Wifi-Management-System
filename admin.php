@@ -15,164 +15,20 @@ require 'db.php';
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <?php include("inc/head.php");?>
+    <title>Bamboo Tech Admin</title>
     <link rel="stylesheet" href="styles.css">
     <script src="admin-script.js" defer></script>
-    <style>
-        /* General Reset */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        /* Body Styling */
-        body {
-            font-family: 'Roboto', sans-serif;
-            background-color: #FFFFFF;
-            color: #333333;
-            min-height: 100vh;
-            margin: 0;
-            transition: padding-left 0.3s ease; /* Smooth transition for sidebar collapse */
-        }
-
-        /* Main Content Container */
-        .container {
-            margin-left: 270px; /* Default margin for sidebar */
-            padding: 20px;
-            transition: margin-left 0.3s ease; /* Smooth transition for sidebar collapse */
-        }
-
-        /* Sidebar Styling */
-        .sidebar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            height: 100%;
-            width: 250px; /* Default width */
-            background-color: #3E844C;
-            color: white;
-            padding-top: 60px; /* Adjust for header */
-            overflow-y: auto;
-            transition: width 0.3s ease; /* Smooth transition for collapse */
-        }
-
-        /* Collapsed Sidebar */
-        .sidebar.collapsed {
-            width: 60px; /* Reduced width when collapsed */
-        }
-
-        /* Sidebar Header */
-        .sidebar-header {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 60px;
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 0 15px;
-            background-color: #28A745;
-        }
-
-        /* Admin Logo */
-        .sidebar-header .logo {
-            font-size: 20px;
-            font-weight: bold;
-        }
-
-        /* Admin Username */
-        .sidebar-header .username {
-            font-size: 14px;
-            display: flex;
-            align-items: center;
-        }
-
-        /* Menu Toggle Button */
-        .menu-toggle {
-            cursor: pointer;
-            font-size: 24px;
-            color: white;
-        }
-
-        /* Groups and Buttons */
-        .group {
-            margin-bottom: 15px;
-        }
-        .group h3 {
-            font-size: 16px;
-            margin-bottom: 10px;
-            padding-left: 10px;
-        }
-        .sidebar button {
-            display: block;
-            width: 100%;
-            padding: 10px;
-            background-color: #28A745;
-            border: none;
-            color: white;
-            font-size: 14px;
-            text-align: left;
-            padding-left: 20px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-        .sidebar button:hover {
-            background-color: #218838;
-        }
-
-        /* Collapsed Sidebar Buttons */
-        .sidebar.collapsed button {
-            padding-left: 10px;
-            text-align: center;
-            font-size: 12px;
-        }
-
-        /* Main Header */
-        .main-header {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            padding: 10px 20px;
-            background-color: #3E844C;
-            color: white;
-        }
-
-        /* Logout Button */
-        .logout-button {
-            background-color: #DC3545;
-            color: white;
-            border: none;
-            padding: 5px 10px;
-            font-size: 14px;
-            cursor: pointer;
-        }
-        .logout-button:hover {
-            background-color: #B02A37;
-        }
-
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .sidebar {
-                width: 60px; /* Always collapsed on smaller screens */
-            }
-            .container {
-                margin-left: 60px; /* Adjust for collapsed sidebar */
-            }
-        }
-    </style>
 </head>
 <body>
     <!-- Sidebar -->
     <div class="sidebar" id="sidebar">
         <!-- Sidebar Header -->
         <div class="sidebar-header">
-            <div class="logo">Bamboo Technologies</div>
-            <div class="username">
-                Logged in as: <?php echo htmlspecialchars($_SESSION['admin_username'] ?? 'Admin'); ?>
+            <div class="logo">Bamboo Tech</div>
+            <div class="username-section">
+                <span class="username">Logged in as: <?php echo htmlspecialchars($_SESSION['admin_username'] ?? 'Admin'); ?></span>
+                <button class="menu-toggle" onclick="toggleSidebar()">&#9776;</button>
             </div>
-            <div class="menu-toggle" onclick="toggleSidebar()">&#9776;</div> <!-- Hamburger menu icon -->
         </div>
 
         <!-- Navigation Groups -->
