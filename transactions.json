@@ -1,0 +1,18 @@
+[
+    {
+        "date": "2024-03-05T12:30:00Z",
+        "phoneNumber": "0712345678",
+        "package": "30 MINUTES",
+        "amount": 7,
+        "mpesaCode": "XYZ123456",
+        "userName": "John Doe"
+    },
+    {
+        "date": "2024-03-05T14:45:00Z",
+        "phoneNumber": "0723456789",
+        "package": "1 Hour",
+        "amount": 9,
+        "mpesaCode": "ABC987654",
+        "userName": "Jane Smith"
+    }
+]
