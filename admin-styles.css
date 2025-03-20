@@ -1,0 +1,461 @@
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body Styling */
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f4f4f4;
+    color: #333333;
+    min-height: 100vh;
+    margin: 0;
+    transition: padding-left 0.3s ease;
+}
+
+/* Sidebar Styling */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 270px; /* Default width */
+    background-color: #3E844C;
+    color: white;
+    padding-top: 60px; /* Adjust for header */
+    overflow-y: auto;
+    transition: width 0.3s ease;
+}
+
+/* Collapsed Sidebar */
+.sidebar.collapsed {
+    width: 60px; /* Reduced width when collapsed */
+}
+
+/* Sidebar Header */
+.sidebar-header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 15px;
+    background-color: #28A745;
+}
+
+/* Admin Logo */
+.sidebar-header .logo {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+/* Username Section */
+.username-section {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.username-section .username {
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 150px;
+}
+
+/* Menu Toggle Button */
+.menu-toggle {
+    cursor: pointer;
+    font-size: 24px;
+    color: white;
+}
+
+/* Navigation Groups */
+.group {
+    margin-bottom: 15px;
+    padding-left: 10px;
+    border-bottom: 1px solid #3E844C; /* Separator line */
+}
+
+.group h3 {
+    font-size: 16px;
+    margin-bottom: 10px;
+    color: #FFFFFF; /* Match sidebar background */
+    font-weight: bold;
+    padding-left: 10px; /* Align with buttons */
+}
+
+/* Sidebar Styling */
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 270px; /* Default width */
+    background-color: #3E844C;
+    color: white;
+    padding-top: 60px; /* Adjust for header */
+    overflow-y: auto;
+    transition: width 0.3s ease;
+}
+
+/* Collapsed Sidebar */
+.sidebar.collapsed {
+    width: 60px; /* Reduced width when collapsed */
+}
+
+/* Sidebar Header */
+.sidebar-header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 15px;
+    background-color: #28A745;
+}
+
+/* Admin Logo */
+.sidebar-header .logo {
+    font-size: 20px;
+    font-weight: bold;
+    transition: opacity 0.3s ease;
+}
+
+/* Hide logo text when collapsed */
+.sidebar.collapsed .logo {
+    opacity: 0; /* Fade out the logo text */
+}
+
+/* Username Section */
+.username-section {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.username-section .username {
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 150px;
+    transition: opacity 0.3s ease;
+}
+
+/* Hide username when collapsed */
+.sidebar.collapsed .username-section .username {
+    opacity: 0; /* Fade out the username */
+}
+
+/* Menu Toggle Button */
+.menu-toggle {
+    cursor: pointer;
+    font-size: 24px;
+    color: white;
+    background: none;
+    border: none;
+    transition: transform 0.3s ease;
+}
+
+/* Rotate the menu icon when expanded */
+.sidebar.collapsed .menu-toggle {
+    transform: rotate(180deg); /* Rotate the hamburger icon */
+}
+
+/* Group Styling */
+.group {
+    margin-bottom: 15px;
+    padding-left: 10px;
+    transition: padding-left 0.3s ease;
+}
+
+/* Adjust padding for collapsed state */
+.sidebar.collapsed .group {
+    padding-left: 0;
+}
+
+/* Sidebar Buttons */
+.sidebar button {
+    display: flex;
+    align-items: center;
+    gap: 10px; /* Space between icon and text */
+    width: 100%;
+    padding: 10px 15px;
+    background-color: #28A745;
+    border: none;
+    color: white;
+    font-size: 14px;
+    text-align: left;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    border-radius: 5px;
+}
+
+/* Center buttons when collapsed */
+.sidebar.collapsed button {
+    padding: 10px;
+    justify-content: center;
+    text-align: center;
+    font-size: 12px;
+}
+
+/* Show only icons when collapsed */
+.sidebar.collapsed button i {
+    font-size: 16px;
+}
+
+.sidebar button:hover {
+    background-color: #218838;
+}
+
+/* Main Content Container */
+.container {
+    margin-left: 270px; /* Default margin for sidebar */
+    padding: 20px;
+    transition: margin-left 0.3s ease;
+}
+
+/* Adjust container margin for collapsed sidebar */
+.sidebar.collapsed + .container {
+    margin-left: 60px; /* Adjust for collapsed sidebar */
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 60px; /* Always collapsed on smaller screens */
+    }
+
+    .container {
+        margin-left: 60px; /* Adjust for collapsed sidebar */
+    }
+}
+
+/* Main Header */
+.main-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px 20px;
+    background-color: #3E844C;
+    color: white;
+    border-radius: 5px;
+}
+
+/* Logout Button */
+.logout-button {
+    background-color: #DC3545;
+    color: white;
+    border: none;
+    padding: 5px 10px;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.logout-button:hover {
+    background-color: #B02A37;
+}
+
+/* Add Package Form */
+.admin-form {
+    margin-bottom: 20px;
+    background-color: #FFFFFF;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.admin-form h2 {
+    font-size: 18px;
+    color: #3E844C;
+    margin-bottom: 10px;
+}
+
+.admin-form input, .admin-form textarea {
+    width: 100%;
+    padding: 10px;
+    margin-bottom: 10px;
+    border: 1px solid #3E844C;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+.admin-form button {
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.admin-form button.green {
+    background-color: #28A745;
+}
+
+.admin-form button.red {
+    background-color: #DC3545;
+}
+
+.admin-form button.blue {
+    background-color: #17A2B8;
+}
+
+.admin-form button.green:hover {
+    background-color: #218838;
+}
+
+.admin-form button.red:hover {
+    background-color: #B02A37;
+}
+
+.admin-form button.blue:hover {
+    background-color: #138496;
+}
+
+/* Package List */
+.package-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+    margin-bottom: 20px;
+}
+
+.package {
+    padding: 15px;
+    border: 1px solid #3E844C;
+    border-radius: 8px;
+    background-color: #F9F9F9;
+    text-align: center;
+    transition: transform 0.2s ease;
+}
+
+.package:hover {
+    transform: scale(1.05);
+}
+
+.package h3 {
+    font-size: 18px;
+    color: #3E844C;
+    margin-bottom: 5px;
+}
+
+.package p {
+    font-size: 14px;
+    color: #666666;
+}
+
+.package button {
+    display: block;
+    width: 100%;
+    padding: 10px;
+    font-size: 16px;
+    font-weight: bold;
+    color: #FFFFFF;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: background-color 0.3s ease;
+}
+
+.package button.red {
+    background-color: #DC3545;
+}
+
+.package button.blue {
+    background-color: #17A2B8;
+}
+
+.package button.red:hover {
+    background-color: #B02A37;
+}
+
+.package button.blue:hover {
+    background-color: #138496;
+}
+
+/* Transactions Table */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+table th, table td {
+    padding: 10px;
+    text-align: left;
+    border: 1px solid #ddd;
+}
+
+table th {
+    background-color: #3E844C;
+    color: white;
+    font-size: 14px;
+}
+
+table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+table tr:hover {
+    background-color: #f1f1f1;
+}
+
+/* Metrics Section (for Dashboard Overview) */
+.metrics {
+    display: flex;
+    gap: 20px;
+    margin-top: 20px;
+}
+
+.metric {
+    background-color: #FFFFFF;
+    padding: 15px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    flex: 1;
+    text-align: center;
+}
+
+.metric h3 {
+    font-size: 16px;
+    color: #3E844C;
+    margin-bottom: 10px;
+}
+
+.metric p {
+    font-size: 24px;
+    font-weight: bold;
+    color: #28A745;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .sidebar {
+        width: 60px; /* Always collapsed on smaller screens */
+    }
+
+    .container {
+        margin-left: 60px; /* Adjust for collapsed sidebar */
+    }
+
+    .metrics {
+        flex-direction: column;
+    }
+}

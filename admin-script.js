@@ -127,12 +127,6 @@ function renderTransactions(transactions) {
     });
 }
 
-// Load packages and transactions when the page loads
-window.onload = () => {
-    loadPackages();
-    loadTransactions();
-};
-
 // Load transactions from PHP (via process.php)
 async function loadTransactions() {
     try {
@@ -171,8 +165,24 @@ function renderTransactions(transactions) {
     });
 }
 
+// Toggle sidebar visibility
+function toggleSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    const mainContent = document.getElementById('mainContent');
+
+    if (sidebar.classList.contains('collapsed')) {
+        // Expand the sidebar
+        sidebar.classList.remove('collapsed');
+        mainContent.style.marginLeft = '270px'; // Restore default margin
+    } else {
+        // Collapse the sidebar
+        sidebar.classList.add('collapsed');
+        mainContent.style.marginLeft = '60px'; // Reduce margin for collapsed sidebar
+    }
+}
+
 // Load packages and transactions when the page loads
 window.onload = () => {
     loadPackages();
-    loadTransactions(); // Load transactions from PHP
+    loadTransactions();
 };

@@ -15,10 +15,8 @@ require 'db.php'; // Include the database handler
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bamboo Tech Admin</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"> <!-- Font Awesome -->
-    <link rel="stylesheet" href="admin-styles.css"> <!-- Separate CSS for admin dashboard -->
-    <script src="admin-script.js"></script>
+    <title>Bamboo Tech - Payments</title>
+    <link rel="stylesheet" href="admin-styles.css">
     <script src="admin-script.js" defer></script>
 </head>
 <body>
@@ -27,34 +25,9 @@ require 'db.php'; // Include the database handler
 
     <!-- Main Content -->
     <div class="container" id="mainContent">
-        <!-- Main Header -->
         <div class="main-header">
-            <h1>Bamboo Tech Admin Dashboard</h1>
+            <h1>Payments Management</h1>
             <a href="index.php" class="logout-button">Logout</a>
-        </div>
-
-        <!-- Add Package Form -->
-        <form id="addPackageForm" class="admin-form">
-            <h2>Add New Package</h2>
-            <input type="text" id="packageName" placeholder="Package Name" required>
-            <input type="number" id="packagePrice" placeholder="Price (Kes)" required>
-            <input type="text" id="packageDuration" placeholder="Duration (e.g., 30 minutes)" required>
-            <button type="submit" class="green">Add Package</button>
-        </form>
-
-        <!-- Package List -->
-        <h2>Current Packages</h2>
-        <div id="packageList" class="package-grid">
-            <?php
-            $packages = get_packages($pdo);
-            foreach ($packages as $pkg): ?>
-                <div class="package">
-                    <h3><?= htmlspecialchars($pkg['name']) ?></h3>
-                    <p>Kes. <?= $pkg['price'] ?> valid for <?= htmlspecialchars($pkg['duration']) ?></p>
-                    <button class="red" onclick="deletePackage(<?= $pkg['id'] ?>)">Delete</button>
-                    <button class="blue" onclick="editPackage(<?= $pkg['id'] ?>)">Edit</button>
-                </div>
-            <?php endforeach; ?>
         </div>
 
         <!-- Transactions Table -->
@@ -93,7 +66,6 @@ require 'db.php'; // Include the database handler
                     </tr>
                 <?php endforeach; ?>
             </tbody>
-            <tbody id="transactionTableBody"> <!-- Ensure this ID exists -->
         </table>
     </div>
 </body>
